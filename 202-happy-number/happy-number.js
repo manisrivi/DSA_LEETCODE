@@ -2,18 +2,26 @@
  * @param {number} n
  * @return {boolean}
  */
-var isHappy = function(n, seen = new Set()) {
+var isHappy = function(n) {
 
-    if (seen.has(n)) return false;
+     const getNext = (n) => {
+        let sum = 0;
+        while (n > 0) {
+            let d = n % 10;
+            sum += d * d;
+            n = Math.floor(n / 10);
+        }
+        return sum;
+    }
 
-    if (n === 1) return true;
+    let slow = n;
+    let fast = getNext(n);
 
-    seen.add(n);
+    while (fast !== 1 && slow !== fast) {
+        slow = getNext(slow);
+        fast = getNext(getNext(fast));
+    }
 
-    const digits = n.toString().split('');
-
-    const sum = digits.reduce((s, d) => s + Math.pow(Number(d), 2), 0);
-
-    return isHappy(sum, seen);  
+    return fast === 1;  
 
 };
